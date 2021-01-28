@@ -1,5 +1,6 @@
 import { Business } from "./business.js";
 import { Media } from "./util/media.js";
+import { PeerBuilder } from "./util/peer.js";
 import { SocketBuilder } from "./util/socket.js";
 import { View } from "./view.js";
 
@@ -15,8 +16,20 @@ const onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const room = urlParams.get("room");
   console.log("this is the room", room);
+
   const socketUrl = "http://localhost:3000";
   const socketBuilder = new SocketBuilder({ socketUrl });
+
+  const peerConfig = Object.values({
+    id:undefined,
+    config: {
+      port: 9000,
+      host: 'localhost',
+      path: '/'
+    }
+  })
+  const peerBuilder = new PeerBuilder(peerConfig);
+
   const view = new View();
   const media = new Media();
   const deps = {
@@ -24,13 +37,11 @@ const onload = () => {
     media,
     room,
     socketBuilder,
+    peerBuilder
   };
 
   Business.initialize(deps);
-  // view.renderVideo({
-  //   userId: "teste01",
-  //   url: "https://media.giphy.com/media/B1BhsjNYplc96C9zAH/giphy.mp4",
-  // });
+
   // const recorderBtn = document.getElementById('record')
   // recorderBtn.addEventListener('click', recordClick(recorderBtn))
 };
