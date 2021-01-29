@@ -1,7 +1,9 @@
 import { Util } from "./util/util.js";
 
 class View {
-  constructor() {}
+  constructor() {
+    this.recorderBtn = document.getElementById("record");
+  }
 
   createVideoElement({ muted = true, src, srcObject }) {
     const video = document.createElement("video");
@@ -36,13 +38,27 @@ class View {
     this.appendToHTMLTree(userId, video, isCurrentId);
   }
 
+  toogleRecordingButtonColor(isActive = true) {
+    this.recorderBtn.style.color = isActive ? "red" : "white";
+  }
+
+  onRecordClick(command) {
+    this.recordingEnabled = false;
+    return () => {
+      const isActive = (this.recordingEnabled = !this.recordingEnabled);
+
+      command(this.recordingEnabled);
+      this.toogleRecordingButtonColor(isActive);
+    };
+  }
+
   appendToHTMLTree(userId, video, isCurrentId) {
     const div = document.createElement("div");
     div.id = userId;
     div.classList.add("wrapper");
     div.append(video);
     const div2 = document.createElement("div");
-    div2.innerText = isCurrentId ? '' : userId;
+    div2.innerText = isCurrentId ? "" : userId;
     div.append(div2);
 
     const videoGrid = document.getElementById("video-grid");
@@ -50,10 +66,19 @@ class View {
   }
 
   setParticipants(count) {
-    const myself = 1
-    const participants = document.getElementById('participants')
+    const myself = 1;
+    const participants = document.getElementById("participants");
 
-    participants.innerHTML = (count + myself)
+    participants.innerHTML = count + myself;
+  }
+
+  removeVideoElement(id) {
+    const element = document.getElementById(id);
+    element.remove();
+  }
+
+  configureRecordingButton(command) {
+    this.recorderBtn.addEventListener("click", this.onRecordClick(command));
   }
 }
 

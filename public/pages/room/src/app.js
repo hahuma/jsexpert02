@@ -4,13 +4,6 @@ import { PeerBuilder } from "./util/peer.js";
 import { SocketBuilder } from "./util/socket.js";
 import { View } from "./view.js";
 
-const recordClick = function (recorderBtn) {
-  this.recordingEnabled = false;
-  return () => {
-    this.recordingEnabled = !this.recordingEnabled;
-    recorderBtn.style.color = this.recordingEnabled ? "red" : "white";
-  };
-};
 
 const onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -42,8 +35,7 @@ const onload = () => {
 
   Business.initialize(deps);
 
-  // const recorderBtn = document.getElementById('record')
-  // recorderBtn.addEventListener('click', recordClick(recorderBtn))
+
 };
 
 window.onload = onload;
